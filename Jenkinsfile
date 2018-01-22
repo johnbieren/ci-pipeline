@@ -101,7 +101,7 @@ podTemplate(name: podName,
                         image: DOCKER_REPO_URL + '/' + OPENSHIFT_NAMESPACE + '/rpmbuild:' + RPMBUILD_TAG,
                         ttyEnabled: true,
                         command: 'cat',
-                        privileged: false,
+                        privileged: true,
                         workingDir: '/workDir'),
                 // This adds the rsync test container to the pod.
                 containerTemplate(name: 'rsync',
@@ -109,7 +109,7 @@ podTemplate(name: podName,
                         image: DOCKER_REPO_URL + '/' + OPENSHIFT_NAMESPACE + '/rsync:' + RSYNC_TAG,
                         ttyEnabled: true,
                         command: 'cat',
-                        privileged: false,
+                        privileged: true,
                         workingDir: '/workDir'),
                 // This adds the ostree-compose test container to the pod.
                 containerTemplate(name: 'ostree-compose',
@@ -117,7 +117,7 @@ podTemplate(name: podName,
                         image: DOCKER_REPO_URL + '/' + OPENSHIFT_NAMESPACE + '/ostree-compose:' + OSTREE_COMPOSE_TAG,
                         ttyEnabled: true,
                         command: 'cat',
-                        privileged: false,
+                        privileged: true,
                         workingDir: '/workDir'),
                 // This adds the ostree-image-compose test container to the pod.
                 containerTemplate(name: 'ostree-image-compose',
@@ -125,7 +125,7 @@ podTemplate(name: podName,
                         image: DOCKER_REPO_URL + '/' + OPENSHIFT_NAMESPACE + '/ostree-image-compose:' + OSTREE_IMAGE_COMPOSE_TAG,
                         ttyEnabled: true,
                         command: 'cat',
-                        privileged: false,
+                        privileged: true,
                         workingDir: '/workDir'),
                 // This adds the singlehost test container to the pod.
                 containerTemplate(name: 'singlehost-test',
@@ -133,7 +133,7 @@ podTemplate(name: podName,
                         image: DOCKER_REPO_URL + '/' + OPENSHIFT_NAMESPACE + '/singlehost-test:' + SINGLEHOST_TEST_TAG,
                         ttyEnabled: true,
                         command: 'cat',
-                        privileged: false,
+                        privileged: true,
                         workingDir: '/workDir'),
                 // This adds the ostree boot image container to the pod.
                 containerTemplate(name: 'ostree-boot-image',
@@ -141,14 +141,14 @@ podTemplate(name: podName,
                         image: DOCKER_REPO_URL + '/' + OPENSHIFT_NAMESPACE + '/ostree-boot-image:' + OSTREE_BOOT_IMAGE_TAG,
                         ttyEnabled: true,
                         command: '/usr/sbin/init',
-                        privileged: false,
+                        privileged: true,
                         workingDir: '/workDir'),
                 containerTemplate(name: 'linchpin-libvirt',
                         alwaysPullImage: true,
                         image: DOCKER_REPO_URL + '/' + OPENSHIFT_NAMESPACE + '/linchpin-libvirt:' + LINCHPIN_LIBVIRT_TAG,
                         ttyEnabled: true,
                         command: '/usr/sbin/init',
-                        privileged: false,
+                        privileged: true,
                         workingDir: '/workDir')
         ],
         volumes: [emptyDirVolume(memory: false, mountPath: '/sys/class/net')])
@@ -475,7 +475,7 @@ podTemplate(name: podName,
                         // only if this is a production build
                         if (env.ghprbActualCommit == null || env.ghprbActualCommit == "master") {
                             def message = "${JOB_NAME} build #${BUILD_NUMBER}: ${currentBuild.currentResult}: ${BUILD_URL}"
-                            pipelineUtils.sendIRCNotification("${IRC_NICK}-${UUID.randomUUID()}", IRC_CHANNEL, message)
+                          //  pipelineUtils.sendIRCNotification("${IRC_NICK}-${UUID.randomUUID()}", IRC_CHANNEL, message)
                         }
                     }
 
