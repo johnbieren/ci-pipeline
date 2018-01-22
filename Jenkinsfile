@@ -14,7 +14,7 @@ env.SINGLEHOST_TEST_TAG = env.SINGLEHOST_TEST_TAG ?: 'stable'
 env.OSTREE_BOOT_IMAGE_TAG = env.OSTREE_BOOT_IMAGE_TAG ?: 'stable'
 env.LINCHPIN_LIBVIRT_TAG = env.LINCHPIN_LIBVIRT_TAG ?: 'stable'
 
-env.DOCKER_REPO_URL = env.DOCKER_REPO_URL ?: '172.30.254.79:5000'
+env.DOCKER_REPO_URL = env.DOCKER_REPO_URL ?: 'docker-registry.default.svc:5000'
 env.OPENSHIFT_NAMESPACE = env.OPENSHIFT_NAMESPACE ?: 'continuous-infra'
 env.OPENSHIFT_SERVICE_ACCOUNT = env.OPENSHIFT_SERVICE_ACCOUNT ?: 'jenkins'
 
@@ -71,7 +71,7 @@ properties(
                                 string(defaultValue: 'stable', description: 'Tag for ostree-compose image', name: 'OSTREE_COMPOSE_TAG'),
                                 string(defaultValue: 'stable', description: 'Tag for ostree-image-compose image', name: 'OSTREE_IMAGE_COMPOSE_TAG'),
                                 string(defaultValue: 'stable', description: 'Tag for singlehost test image', name: 'SINGLEHOST_TEST_TAG'),
-                                string(defaultValue: '172.30.254.79:5000', description: 'Docker repo url for Openshift instance', name: 'DOCKER_REPO_URL'),
+                                string(defaultValue: 'docker-registry.default.svc:5000', description: 'Docker repo url for Openshift instance', name: 'DOCKER_REPO_URL'),
                                 string(defaultValue: 'continuous-infra', description: 'Project namespace for Openshift operations', name: 'OPENSHIFT_NAMESPACE'),
                                 string(defaultValue: 'jenkins', description: 'Service Account for Openshift operations', name: 'OPENSHIFT_SERVICE_ACCOUNT'),
                                 booleanParam(defaultValue: false, description: 'Force generation of the image', name: 'GENERATE_IMAGE'),
@@ -101,7 +101,7 @@ podTemplate(name: podName,
                         image: DOCKER_REPO_URL + '/' + OPENSHIFT_NAMESPACE + '/rpmbuild:' + RPMBUILD_TAG,
                         ttyEnabled: true,
                         command: 'cat',
-                        privileged: true,
+                        privileged: false,
                         workingDir: '/workDir'),
                 // This adds the rsync test container to the pod.
                 containerTemplate(name: 'rsync',
@@ -109,7 +109,7 @@ podTemplate(name: podName,
                         image: DOCKER_REPO_URL + '/' + OPENSHIFT_NAMESPACE + '/rsync:' + RSYNC_TAG,
                         ttyEnabled: true,
                         command: 'cat',
-                        privileged: true,
+                        privileged: false,
                         workingDir: '/workDir'),
                 // This adds the ostree-compose test container to the pod.
                 containerTemplate(name: 'ostree-compose',
@@ -117,7 +117,7 @@ podTemplate(name: podName,
                         image: DOCKER_REPO_URL + '/' + OPENSHIFT_NAMESPACE + '/ostree-compose:' + OSTREE_COMPOSE_TAG,
                         ttyEnabled: true,
                         command: 'cat',
-                        privileged: true,
+                        privileged: false,
                         workingDir: '/workDir'),
                 // This adds the ostree-image-compose test container to the pod.
                 containerTemplate(name: 'ostree-image-compose',
@@ -125,7 +125,7 @@ podTemplate(name: podName,
                         image: DOCKER_REPO_URL + '/' + OPENSHIFT_NAMESPACE + '/ostree-image-compose:' + OSTREE_IMAGE_COMPOSE_TAG,
                         ttyEnabled: true,
                         command: 'cat',
-                        privileged: true,
+                        privileged: false,
                         workingDir: '/workDir'),
                 // This adds the singlehost test container to the pod.
                 containerTemplate(name: 'singlehost-test',
@@ -133,7 +133,7 @@ podTemplate(name: podName,
                         image: DOCKER_REPO_URL + '/' + OPENSHIFT_NAMESPACE + '/singlehost-test:' + SINGLEHOST_TEST_TAG,
                         ttyEnabled: true,
                         command: 'cat',
-                        privileged: true,
+                        privileged: false,
                         workingDir: '/workDir'),
                 // This adds the ostree boot image container to the pod.
                 containerTemplate(name: 'ostree-boot-image',
@@ -141,14 +141,14 @@ podTemplate(name: podName,
                         image: DOCKER_REPO_URL + '/' + OPENSHIFT_NAMESPACE + '/ostree-boot-image:' + OSTREE_BOOT_IMAGE_TAG,
                         ttyEnabled: true,
                         command: '/usr/sbin/init',
-                        privileged: true,
+                        privileged: false,
                         workingDir: '/workDir'),
                 containerTemplate(name: 'linchpin-libvirt',
                         alwaysPullImage: true,
                         image: DOCKER_REPO_URL + '/' + OPENSHIFT_NAMESPACE + '/linchpin-libvirt:' + LINCHPIN_LIBVIRT_TAG,
                         ttyEnabled: true,
                         command: '/usr/sbin/init',
-                        privileged: true,
+                        privileged: false,
                         workingDir: '/workDir')
         ],
         volumes: [emptyDirVolume(memory: false, mountPath: '/sys/class/net')])
