@@ -188,7 +188,7 @@ podTemplate(name: podName,
                         // Gather some info about the node we are running on for diagnostics
                         pipelineUtils.verifyPod(OPENSHIFT_NAMESPACE, env.NODE_NAME)
                         // create audit message file
-                        pipelineUtils.initializeAuditFile(msgAuditFile)
+                        //pipelineUtils.initializeAuditFile(msgAuditFile)
                     }
 
                     // Set our current stage value
@@ -217,7 +217,7 @@ podTemplate(name: podName,
                         messageFields = pipelineUtils.setMessageFields("package.running")
 
                         // Send message org.centos.prod.ci.pipeline.package.running on fedmsg
-                        pipelineUtils.sendMessageWithAudit(messageFields['properties'], messageFields['content'], msgAuditFile, fedmsgRetryCount)
+                        //pipelineUtils.sendMessageWithAudit(messageFields['properties'], messageFields['content'], msgAuditFile, fedmsgRetryCount)
 
                         // Execute rpmbuild-test script in rpmbuild container
                         pipelineUtils.executeInContainer(currentStage, "rpmbuild", "/tmp/rpmbuild-test.sh")
@@ -231,7 +231,7 @@ podTemplate(name: podName,
                         messageFields = pipelineUtils.setMessageFields("package.complete")
 
                         // Send message org.centos.prod.ci.pipeline.package.complete on fedmsg
-                        pipelineUtils.sendMessageWithAudit(messageFields['properties'], messageFields['content'], msgAuditFile, fedmsgRetryCount)
+                        //pipelineUtils.sendMessageWithAudit(messageFields['properties'], messageFields['content'], msgAuditFile, fedmsgRetryCount)
                     }
 
                     currentStage = "ci-pipeline-ostree-compose"
@@ -243,7 +243,7 @@ podTemplate(name: podName,
                         messageFields = pipelineUtils.setMessageFields("compose.running")
 
                         // Send message org.centos.prod.ci.pipeline.compose.running on fedmsg
-                        pipelineUtils.sendMessageWithAudit(messageFields['properties'], messageFields['content'], msgAuditFile, fedmsgRetryCount)
+                        //pipelineUtils.sendMessageWithAudit(messageFields['properties'], messageFields['content'], msgAuditFile, fedmsgRetryCount)
 
                         // Get previous ostree artifacts
                         env.rsync_paths = "ostree"
