@@ -1,5 +1,5 @@
-env.ghprbGhRepository = env.ghprbGhRepository ?: 'CentOS-PaaS-SIG/ci-pipeline'
-env.ghprbActualCommit = env.ghprbActualCommit ?: 'master'
+env.ghprbGhRepository = env.ghprbGhRepository ?: 'johnbieren/ci-pipeline'
+env.ghprbActualCommit = env.ghprbActualCommit ?: 'noprivileged'
 env.ghprbPullAuthorLogin = env.ghprbPullAuthorLogin ?: ''
 
 env.TARGET_BRANCH = env.TARGET_BRANCH ?: 'master'
@@ -59,8 +59,8 @@ properties(
                                 string(defaultValue: '', description: 'Main topic to publish on', name: 'MAIN_TOPIC'),
                                 string(defaultValue: 'fedora-fedmsg', description: 'Main provider to send messages on', name: 'MSG_PROVIDER'),
                                 string(defaultValue: '', description: 'Principal for authenticating with fedora build system', name: 'FEDORA_PRINCIPAL'),
-                                string(defaultValue: 'master', description: '', name: 'ghprbActualCommit'),
-                                string(defaultValue: 'CentOS-PaaS-SIG/ci-pipeline', description: '', name: 'ghprbGhRepository'),
+                                string(defaultValue: 'noprivileged', description: '', name: 'ghprbActualCommit'),
+                                string(defaultValue: 'johnbieren/ci-pipeline', description: '', name: 'ghprbGhRepository'),
                                 string(defaultValue: '', description: '', name: 'sha1'),
                                 string(defaultValue: '', description: '', name: 'ghprbPullId'),
                                 string(defaultValue: '', description: '', name: 'ghprbPullAuthorLogin'),
