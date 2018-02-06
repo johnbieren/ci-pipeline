@@ -30,7 +30,7 @@ if [[ -z "${RSYNC_USER}" || -z "${RSYNC_SERVER}" || -z "${RSYNC_DIR}" || -z "${R
      rm -rf tests/integration
      mkdir -p tests/integration
      cp ${TEST_ARTIFACTS}/*.log tests/integration/
-     rsync --stats -arv tests ${RSYNC_LOCATION}/repo/${package}_repo/logs
+     #rsync --stats -arv tests ${RSYNC_LOCATION}/repo/${package}_repo/logs
 }
 trap clean_up EXIT SIGHUP SIGINT SIGTERM
 

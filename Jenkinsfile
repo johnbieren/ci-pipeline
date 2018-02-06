@@ -257,7 +257,7 @@ podTemplate(name: podName,
                         // Push new ostree compose to artifacts server
                         env.rsync_to = "${env.RSYNC_USER}@${env.RSYNC_SERVER}::${env.RSYNC_DIR}/${env.RSYNC_BRANCH}/"
                         env.rsync_from = "${env.WORKSPACE}/"
-                        pipelineUtils.executeInContainer(currentStage + "-rsync-after", "rsync", "/tmp/rsync.sh")
+                        //pipelineUtils.executeInContainer(currentStage + "-rsync-after", "rsync", "/tmp/rsync.sh")
 
                         // Load ostree properties as variables
                         def ostree_props = "${env.WORKSPACE}/" + currentStage + "/logs/ostree.props"
@@ -269,7 +269,7 @@ podTemplate(name: podName,
                         env.rsync_paths = "."
                         env.rsync_from = "${env.WORKSPACE}/" + currentStage + "/logs/"
                         env.rsync_to = "${env.RSYNC_USER}@${env.RSYNC_SERVER}::${env.RSYNC_DIR}/${env.RSYNC_BRANCH}/images/${env.imgname}/" + currentStage + "/"
-                        pipelineUtils.executeInContainer(currentStage + "-rsync-logs", "rsync", "/tmp/rsync.sh")
+                        //pipelineUtils.executeInContainer(currentStage + "-rsync-logs", "rsync", "/tmp/rsync.sh")
 
                         // Set our message topic, properties, and content
                         messageFields = pipelineUtils.setMessageFields("compose.complete")
@@ -277,7 +277,7 @@ podTemplate(name: podName,
                         // Send message org.centos.prod.ci.pipeline.compose.complete on fedmsg
                         pipelineUtils.sendMessageWithAudit(messageFields['properties'], messageFields['content'], msgAuditFile, fedmsgRetryCount)
 
-                        pipelineUtils.checkLastImage(currentStage)
+                        //pipelineUtils.checkLastImage(currentStage)
                     }
 
                     currentStage = "ci-pipeline-ostree-image-compose"
@@ -312,14 +312,14 @@ podTemplate(name: podName,
                         env.rsync_paths = "netinst"
                         env.rsync_from = "${env.WORKSPACE}/"
                         env.rsync_to = "${env.RSYNC_USER}@${env.RSYNC_SERVER}::${env.RSYNC_DIR}/${env.RSYNC_BRANCH}/"
-                        pipelineUtils.executeInContainer(currentStage + "-rsync-push-netinst", "rsync", "/tmp/rsync.sh")
+                        //pipelineUtils.executeInContainer(currentStage + "-rsync-push-netinst", "rsync", "/tmp/rsync.sh")
 
                         String untested_img_loc = "${env.WORKSPACE}/images/untested-atomic.qcow2"
                         sh "cp -f ${untested_img_loc} ${env.WORKSPACE}/"
                         if (fileExists("${env.WORKSPACE}/NeedNewImage.txt") || ("${env.GENERATE_IMAGE}" == "true")) {
                             // Rsync push images
                             env.rsync_paths = "images"
-                            pipelineUtils.executeInContainer(currentStage + "-rsync-after-netinst", "rsync", "/tmp/rsync.sh")
+                            //pipelineUtils.executeInContainer(currentStage + "-rsync-after-netinst", "rsync", "/tmp/rsync.sh")
 
                             // These variables will mess with boot sanity jobs
                             // later if they are injected from a non pushed img
@@ -341,7 +341,7 @@ podTemplate(name: podName,
                         env.rsync_paths = "."
                         env.rsync_from = "${env.WORKSPACE}/" + currentStage + "/logs/"
                         env.rsync_to = "${env.RSYNC_USER}@${env.RSYNC_SERVER}::${env.RSYNC_DIR}/${env.RSYNC_BRANCH}/images/${env.imgname}/" + currentStage + "/"
-                        pipelineUtils.executeInContainer(currentStage + "-rsync-logs", "rsync", "/tmp/rsync.sh")
+                        //pipelineUtils.executeInContainer(currentStage + "-rsync-logs", "rsync", "/tmp/rsync.sh")
                     }
 
                     currentStage = "ci-pipeline-ostree-image-boot-sanity"
@@ -367,7 +367,7 @@ podTemplate(name: podName,
                             // If boot sanity passes, we update images dir on artifacts
                             env.rsync_to = "${env.RSYNC_USER}@${env.RSYNC_SERVER}::${env.RSYNC_DIR}/${env.RSYNC_BRANCH}/"
                             env.rsync_from = "${env.WORKSPACE}/"
-                            pipelineUtils.executeInContainer(currentStage + "-rsync-after", "rsync", "/tmp/rsync.sh")
+                            //pipelineUtils.executeInContainer(currentStage + "-rsync-after", "rsync", "/tmp/rsync.sh")
 
                             // Set our message topic, properties, and content
                             messageFields = pipelineUtils.setMessageFields("image.test.smoke.complete")

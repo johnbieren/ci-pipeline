@@ -64,7 +64,7 @@ if [[ -z "${RSYNC_USER}" || -z "${RSYNC_SERVER}" || -z "${RSYNC_DIR}" || -z "${R
      rm -rf tests/package
      mkdir -p tests/package
      cp ${TEST_ARTIFACTS}/* tests/package/
-     rsync --stats -arv tests ${RSYNC_LOCATION}/repo/${package}_repo/logs
+     #rsync --stats -arv tests ${RSYNC_LOCATION}/repo/${package}_repo/logs
 }
 trap clean_up EXIT SIGHUP SIGINT SIGTERM
 

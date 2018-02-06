@@ -134,18 +134,19 @@ if [ -z "${RSYNC_PASSWORD}" ]; then echo "Told to rsync but no RSYNC_PASSWORD en
 # Create our ${RSYNC_BRANCH}/repo directory structure
 mkdir -p ${RSYNC_BRANCH}/repo
 # Rsync our ${RSYNC_BRANCH}/repo directory structure over first
-rsync -arv ${RSYNC_BRANCH} ${RSYNC_USER}@${RSYNC_SERVER}::${RSYNC_DIR}
+#rsync -arv ${RSYNC_BRANCH} ${RSYNC_USER}@${RSYNC_SERVER}::${RSYNC_DIR}
 
 # Kill backgrounded jobs on exit
 function clean_up {
     # Delete the rsync lock we placed
-     rsync -vr --delete $(mktemp -d)/ ${RSYNC_LOCATION}/repo/lockdir/
+     #rsync -vr --delete $(mktemp -d)/ ${RSYNC_LOCATION}/repo/lockdir/
+    echo "done"
 }
 trap clean_up EXIT SIGHUP SIGINT SIGTERM
 # Write uuid to a lock file and store a backup
 uuidgen > file.lock
 cp file.lock uuid.saved
-while true; do
+while false; do #modified
     # Check if lock exists on remote server
      while [[ $(rsync --ignore-existing --dry-run -avz file.lock ${RSYNC_LOCATION}/repo/lockdir) != *"file.lock"* ]]; do
           sleep 60
@@ -161,16 +162,16 @@ while true; do
      fi
      sleep 60
 done
-rsync --delete --stats -a ${RPMDIR} ${RSYNC_LOCATION}/repo
+#rsync --delete --stats -a ${RPMDIR} ${RSYNC_LOCATION}/repo
 if [ "$?" != 0 ]; then echo "ERROR: RSYNC REPO\nSTATUS: $?"; exit 1; fi
 # Update repo manifest file on artifacts.ci.centos.org
-rsync --delete --stats -a ${RSYNC_LOCATION}/repo/manifest.txt .
+#rsync --delete --stats -a ${RSYNC_LOCATION}/repo/manifest.txt .
 # Remove repo name from file if it exists so it isn't there twice
 sed -i "/${fed_repo}_repo/d" manifest.txt
 rm -rf ${RSYNC_BRANCH}
 rm -rf repo
 echo "${fed_repo}_repo $(date --utc +%FT%T%Z)" >> manifest.txt
 sort manifest.txt -o manifest.txt
-rsync --delete -stats -a manifest.txt ${RSYNC_LOCATION}/repo
+#rsync --delete -stats -a manifest.txt ${RSYNC_LOCATION}/repo
 clean_up
 exit 0

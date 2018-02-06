@@ -423,7 +423,7 @@ def prepareCredentials() {
         '''
     }
     // Initialize RSYNC_PASSWORD from credentialsId
-    // env.RSYNC_PASSWORD = getPasswordFromDuffyKey('duffy-key')
+    env.RSYNC_PASSWORD = getPasswordFromDuffyKey('duffy-key')
 }
 /**
  * Library to set default environmental variables. Performed once at start of Jenkinsfile
