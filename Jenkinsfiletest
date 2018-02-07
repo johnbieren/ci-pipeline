@@ -151,7 +151,8 @@ podTemplate(name: podName,
                         privileged: true,
                         workingDir: '/workDir')
         ],
-        volumes: [emptyDirVolume(memory: false, mountPath: '/sys/class/net')])
+        volumes: [emptyDirVolume(memory: false, mountPath: '/sys/class/net'),
+                  nfsVolume(serverAddress: 'ntap-rdu2-c01-eng01-nfs01b.storage.rdu2.redhat.com', serverPath: '/engineering_ci_pipeline_rhel8_nfs', readOnly: false, mountPath: '/mnt/filestore')])
 {
     node(podName) {
 
