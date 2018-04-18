@@ -1126,8 +1126,9 @@ def watchForMessages(String msg_provider, String message) {
 }
 
 /**
+ * TODO - improve this function for pr checking
  * Test if $tag tests exist for $mypackage on $mybranch in fedora dist-git
- * For mybranch, use fXX or master
+ * For mybranch, use fXX, master, or for a PR, use pr-#
  * @param mypackage
  * @param mybranch
  * @param tag
@@ -1135,8 +1136,25 @@ def watchForMessages(String msg_provider, String message) {
  */
 def checkTests(String mypackage, String mybranch, String tag) {
     echo "Currently checking if package tests exist"
-    return sh (returnStatus: true, script: """
-    curl -q https://src.fedoraproject.org/rpms/${mypackage}/raw/${mybranch}/f/tests/tests.yml | grep '\\- '${tag}'' """) == 0
+    if (mybranch ==~ /f[2-9][0-9]/ || mybranch == 'master') {
+        return sh (returnStatus: true, script: """
+        curl -q https://src.fedoraproject.org/rpms/${mypackage}/raw/${mybranch}/f/tests/tests.yml | grep '\\- '${tag}'' """) == 0
+    else if (mybranch.startsWith("pr-")) {
+       myPR = mybranch.substring(mybranch.lastIndexOf("-")+1)
+       // If tests already existed for package
+       myURL = sh(script: """curl -q https://src.fedoraproject.org/rpms/${mypackage}/pull-request/${myPR} | grep master | grep href | grep -v '/fork/' | cut -d '"' -f 2""", returnStdout: true).trim()
+       if (sh (returnStatus: true, script: """curl -q https://src.fedoraproject.org${myURL}/f/tests/tests.yml | grep '\\- '${tag}'' """) == 0) {
+           return true
+       // If PR is adding tests
+       } else if ((sh (returnStatus: true, script: """curl -q https://src.fedoraproject.org/rpms/${mypackage}/pull-request/${mybranch}.patch | grep '\\- '${tag}'' """) == 0) && (sh (returnStatus: true, script: """curl -q https://src.fedoraproject.org/rpms/${mypackage}/pull-request/${mybranch}.patch | grep 'tests.yml' """) == 0)) {
+           return true
+       } else {
+           return false
+       }
+    } else {
+        print "Don't know how to parse branch value: " + mybranch
+        return false
+    }
 }
 
 /**
