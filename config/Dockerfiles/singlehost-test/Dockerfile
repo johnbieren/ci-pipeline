@@ -1,4 +1,4 @@
-FROM centos:7
+FROM fedora:latest
 LABEL maintainer "https://github.com/CentOS-PaaS-SIG/ci-pipeline"
 LABEL description="This container is meant to \
 use dist-git tests to test packages, \
