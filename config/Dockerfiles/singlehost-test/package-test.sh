@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+echo hi
 
 CURRENTDIR=$(pwd)
 if [ ${CURRENTDIR} == "/" ] ; then
