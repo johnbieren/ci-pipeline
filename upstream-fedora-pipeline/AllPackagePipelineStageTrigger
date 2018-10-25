@@ -45,11 +45,12 @@ properties([
     [
       $class: 'org.jenkinsci.plugins.ghprb.GhprbTrigger',
       orgslist: 'CentOS-PaaS-SIG',
+      userWhitelist(['bgoncalv', 'thrix', 'Andrei-Stepanov', 'pypingou', 'psss', 'ignatenkobrain']),
       cron: 'H/5 * * * *',
       triggerPhrase: '.*\\[upstream-test\\].*',
       onlyTriggerPhrase: false,
       useGitHubHooks: true,
-      permitAll: true,
+      permitAll: false,
       autoCloseFailedPullRequests: false,
       displayBuildErrorsOnDownstreamBuilds: true,
       extensions: [
